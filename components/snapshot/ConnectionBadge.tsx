@@ -24,9 +24,9 @@ export function ConnectionBadge({ status, lastEventAt }: { status: StreamStatus;
       <span
         role="status"
         aria-live="polite"
-        className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 font-medium ${s.cls}`}
+        className={`inline-flex max-w-full items-center gap-2 rounded-full border px-2.5 py-1 font-medium ${s.cls}`}
       >
-        <span className={`h-2 w-2 rounded-full ${s.dot}`} aria-hidden="true" />
+        <span className={`h-2 w-2 shrink-0 rounded-full ${s.dot}`} aria-hidden="true" />
         {t(s.key)}
       </span>
     </div>

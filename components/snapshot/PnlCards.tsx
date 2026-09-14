@@ -17,7 +17,7 @@ export function PnlCards({ pnl }: { pnl: SnapshotDto['pnl'] }) {
     { label: t('pnl.dayTotal'), value: signedMoney(pnl.dayTotal), cls: tone(pnl.dayTotal), hint: t('pnl.dayTotal.hint') },
   ];
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
       {tiles.map((tile) => (
         <div key={tile.label} className="rounded-xl border border-line bg-card p-3">
           <div className="text-[11px] font-medium uppercase tracking-wider text-muted">{tile.label}</div>

@@ -51,30 +51,40 @@ export default function SnapshotPage() {
       ? selected
       : (list.find((a) => a.status === 'active') ?? list[0])?.id ?? null;
 
+  const controls = (
+    <>
+      <LanguageSelector />
+      <ThemeToggle />
+      <button
+        type="button"
+        onClick={() => void signOut()}
+        className="h-8 rounded-md border border-line px-2.5 text-xs text-muted transition hover:bg-card-2 hover:text-fg"
+      >
+        {t('header.signOut')}
+      </button>
+    </>
+  );
+
   return (
     <div className="flex min-h-full flex-1 flex-col">
       <header className="border-b border-line bg-bg/80 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <div className="flex items-center gap-3">
-            <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-accent-fg">AF</span>
-            <div>
-              <div className="text-sm font-semibold text-fg">{session.portalName}</div>
-              <div className="font-mono text-[11px] text-muted">
-                {session.principal.traderId} · {session.principal.brokerId}
+        {/* Two rows on phones (brand + controls, then the account selector); one row from sm up. */}
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-6">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-accent-fg">AF</span>
+              <div className="min-w-0">
+                <div className="truncate text-sm font-semibold text-fg">{session.portalName}</div>
+                <div className="truncate font-mono text-[11px] text-muted">
+                  {session.principal.traderId} · {session.principal.brokerId}
+                </div>
               </div>
             </div>
+            <div className="flex shrink-0 items-center gap-2 sm:hidden">{controls}</div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {list.length > 0 ? <AccountSelector accounts={list} value={current} onChange={setSelected} /> : null}
-            <LanguageSelector />
-            <ThemeToggle />
-            <button
-              type="button"
-              onClick={() => void signOut()}
-              className="h-8 rounded-md border border-line px-2.5 text-xs text-muted transition hover:bg-card-2 hover:text-fg"
-            >
-              {t('header.signOut')}
-            </button>
+            <div className="hidden items-center gap-2 sm:flex">{controls}</div>
           </div>
         </div>
       </header>

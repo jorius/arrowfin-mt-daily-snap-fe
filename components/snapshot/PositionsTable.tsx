@@ -8,7 +8,7 @@ export function PositionsTable({ positions }: { positions: PositionDto[] }) {
   const { money, price, qty, signedMoney } = useFormat();
   return (
     <div className="overflow-x-auto rounded-xl border border-line bg-card">
-      <table className="w-full text-left text-xs">
+      <table className="w-full min-w-[560px] text-left text-xs">
         <thead className="sticky top-0 bg-card-2 text-[11px] uppercase tracking-wider text-muted">
           <tr>
             <th className="px-3 py-2 font-medium">{t('table.symbol')}</th>
