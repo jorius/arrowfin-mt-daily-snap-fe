@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { LanguageSelector } from '@/components/LanguageSelector';
 import { AccountSelector } from '@/components/snapshot/AccountSelector';
 import { SnapshotWidget } from '@/components/snapshot/SnapshotWidget';
 import { EmptyState, ErrorState, SnapshotSkeleton } from '@/components/snapshot/States';
@@ -11,9 +12,11 @@ import { useHydrated } from '@/hooks/useHydrated';
 import { useSession } from '@/hooks/useSession';
 import { ApiError, apiFetch } from '@/lib/api';
 import { clearSession } from '@/lib/auth';
+import { useT } from '@/lib/i18n';
 
 export default function SnapshotPage() {
   const router = useRouter();
+  const t = useT();
   const hydrated = useHydrated();
   const session = useSession();
   const [selected, setSelected] = useState<string | null>(null);
@@ -39,7 +42,7 @@ export default function SnapshotPage() {
   }, [accountsUnauthorized, signOut]);
 
   if (!hydrated || !session) {
-    return <main className="flex flex-1 items-center justify-center text-sm text-muted">Loading…</main>;
+    return <main className="flex flex-1 items-center justify-center text-sm text-muted">{t('app.loading')}</main>;
   }
 
   const list = accounts.data?.accounts ?? [];
@@ -63,13 +66,14 @@ export default function SnapshotPage() {
           </div>
           <div className="flex items-center gap-3">
             {list.length > 0 ? <AccountSelector accounts={list} value={current} onChange={setSelected} /> : null}
+            <LanguageSelector />
             <ThemeToggle />
             <button
               type="button"
               onClick={() => void signOut()}
-              className="rounded-md border border-line px-2.5 py-1.5 text-xs text-muted transition hover:bg-card-2 hover:text-fg"
+              className="h-8 rounded-md border border-line px-2.5 text-xs text-muted transition hover:bg-card-2 hover:text-fg"
             >
-              Sign out
+              {t('header.signOut')}
             </button>
           </div>
         </div>
@@ -80,11 +84,11 @@ export default function SnapshotPage() {
           <SnapshotSkeleton />
         ) : accounts.isError ? (
           <ErrorState
-            message={accounts.error instanceof Error ? accounts.error.message : 'Unknown error'}
+            message={accounts.error instanceof Error ? accounts.error.message : t('state.unknownError')}
             onRetry={() => void accounts.refetch()}
           />
         ) : current === null ? (
-          <EmptyState title="No accounts" hint="This trader has no accounts to display." />
+          <EmptyState title={t('accounts.empty.title')} hint={t('accounts.empty.hint')} />
         ) : (
           <SnapshotWidget accountId={current} apiKey={session.apiKey} onUnauthorized={signOut} />
         )}

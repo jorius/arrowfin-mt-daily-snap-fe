@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { useFillStream } from '@/hooks/useFillStream';
 import { useSnapshot } from '@/hooks/useSnapshot';
 import { ApiError } from '@/lib/api';
-import { utcTime } from '@/lib/format';
+import { useFormat, useT } from '@/lib/i18n';
+import type { MessageKey } from '@/lib/i18n/en';
 import { ConnectionBadge } from './ConnectionBadge';
 import { HighRiskBanner } from './HighRiskBanner';
 import { PnlCards } from './PnlCards';
@@ -12,6 +13,12 @@ import { PositionsTable } from './PositionsTable';
 import { RiskGauge } from './RiskGauge';
 import { SessionInfo } from './SessionInfo';
 import { EmptyState, ErrorState, SnapshotSkeleton } from './States';
+
+const STATUS_KEYS: Record<string, MessageKey> = {
+  active: 'account.status.active',
+  restricted: 'account.status.restricted',
+  closed: 'account.status.closed',
+};
 
 export function SnapshotWidget({
   accountId,
@@ -22,6 +29,8 @@ export function SnapshotWidget({
   apiKey: string;
   onUnauthorized: () => void;
 }) {
+  const t = useT();
+  const { utcTime } = useFormat();
   const snapshot = useSnapshot(accountId);
   const stream = useFillStream(apiKey, accountId);
 
@@ -36,7 +45,7 @@ export function SnapshotWidget({
   if (snapshot.isError) {
     return (
       <ErrorState
-        message={snapshot.error instanceof Error ? snapshot.error.message : 'Unknown error'}
+        message={snapshot.error instanceof Error ? snapshot.error.message : t('state.unknownError')}
         onRetry={() => void snapshot.refetch()}
       />
     );
@@ -45,9 +54,10 @@ export function SnapshotWidget({
   const data = snapshot.data;
   const high = data.risk.score > 75;
   const stale = stream.status === 'stale' || stream.status === 'unauthorized';
+  const statusKey = STATUS_KEYS[data.account.status];
 
   return (
-    <section aria-label="Daily snapshot" className={high ? 'rounded-2xl ring-1 ring-danger/60' : ''}>
+    <section aria-label={t('snapshot.label')} className={high ? 'rounded-2xl ring-1 ring-danger/60' : ''}>
       {high ? <HighRiskBanner score={data.risk.score} /> : null}
 
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -55,12 +65,12 @@ export function SnapshotWidget({
           <h1 className="font-mono text-sm font-semibold text-fg">
             {data.account.accountNumber}
             <span className="ml-2 text-xs font-normal text-muted">
-              {data.account.accountType} · {data.account.status}
+              {data.account.accountType} · {statusKey ? t(statusKey) : data.account.status}
             </span>
           </h1>
           <div className="text-[11px] text-muted">
-            Snapshot as of {utcTime(data.asOf)}
-            {snapshot.isFetching ? <span className="ml-2 text-accent-2">↻ updating</span> : null}
+            {t('snapshot.asOf', { time: utcTime(data.asOf) })}
+            {snapshot.isFetching ? <span className="ml-2 text-accent-2">↻ {t('snapshot.updating')}</span> : null}
           </div>
         </div>
         <ConnectionBadge status={stream.status} lastEventAt={stream.lastEventAt} />
@@ -70,7 +80,7 @@ export function SnapshotWidget({
         <div className="space-y-4">
           <PnlCards pnl={data.pnl} />
           {data.positions.length === 0 ? (
-            <EmptyState title="No open positions" hint="Nothing is open in this session. Fills will appear here as they arrive." />
+            <EmptyState title={t('positions.empty.title')} hint={t('positions.empty.hint')} />
           ) : (
             <PositionsTable positions={data.positions} />
           )}

@@ -1,18 +1,20 @@
 'use client';
 
+import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/theme';
 
-export function ThemeToggle({ label }: { label?: { toLight: string; toDark: string } }) {
+export function ThemeToggle() {
   const { theme, toggle } = useTheme();
+  const t = useT();
   const dark = theme === 'dark';
-  const text = dark ? (label?.toLight ?? 'Switch to light theme') : (label?.toDark ?? 'Switch to dark theme');
+  const text = dark ? t('theme.toLight') : t('theme.toDark');
   return (
     <button
       type="button"
       onClick={toggle}
       aria-label={text}
       title={text}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-line text-muted transition hover:bg-card-2 hover:text-fg"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line text-muted transition hover:bg-card-2 hover:text-fg"
     >
       {dark ? (
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
