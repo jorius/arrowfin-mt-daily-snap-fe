@@ -7,18 +7,35 @@ import type { Session } from '@/types/api';
  * own clock because the backend runs on a replay clock.
  */
 const STORAGE_KEY = 'arrowfin.session';
+const listeners = new Set<() => void>();
 
-export function getSession(): Session | null {
+function notify() {
+  for (const listener of listeners) listener();
+}
+
+/** Raw stored value; stable string so useSyncExternalStore can compare it. */
+export function readRawSession(): string | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
+    return window.sessionStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function parseSession(raw: string | null): Session | null {
+  if (!raw) return null;
+  try {
     const session = JSON.parse(raw) as Partial<Session>;
     if (!session.apiKey || !session.principal?.traderId) return null;
     return session as Session;
   } catch {
     return null;
   }
+}
+
+export function getSession(): Session | null {
+  return parseSession(readRawSession());
 }
 
 export function setSession(session: Session): void {
@@ -28,6 +45,7 @@ export function setSession(session: Session): void {
   } catch {
     // Storage can be unavailable (private mode); the user simply has to log in again.
   }
+  notify();
 }
 
 export function clearSession(): void {
@@ -37,4 +55,14 @@ export function clearSession(): void {
   } catch {
     // ignore
   }
+  notify();
+}
+
+export function subscribeSession(listener: () => void): () => void {
+  listeners.add(listener);
+  window.addEventListener('storage', listener);
+  return () => {
+    listeners.delete(listener);
+    window.removeEventListener('storage', listener);
+  };
 }
