@@ -1,7 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
+import { WS_STALE_AFTER_MS } from '@/lib/env';
 import { createSocket } from '@/lib/socket';
-import type { FillEvent } from '@/types/api';
+import type { FillEvent, ServerHello } from '@/types/api';
 
 export type StreamStatus =
   | 'connecting'
@@ -14,10 +15,11 @@ export interface FillStream {
   status: StreamStatus;
   lastEvent: FillEvent | null;
   lastEventAt: string | null;
+  /** Server-side socket configuration, announced once per admitted connection. */
+  hello: ServerHello | null;
+  /** Transport the client negotiated (e.g. "websocket"). */
+  transport: string | null;
 }
-
-/** After this long without a connection the figures on screen are declared stale. */
-const STALE_AFTER_MS = 5_000;
 
 /**
  * One socket per API key for the lifetime of the page. Fill events for the
@@ -30,6 +32,8 @@ export function useFillStream(apiKey: string | null, accountId: string | null): 
   const [status, setStatus] = useState<StreamStatus>('connecting');
   const [lastEvent, setLastEvent] = useState<FillEvent | null>(null);
   const [lastEventAt, setLastEventAt] = useState<string | null>(null);
+  const [hello, setHello] = useState<ServerHello | null>(null);
+  const [transport, setTransport] = useState<string | null>(null);
   const accountRef = useRef<string | null>(accountId);
 
   useEffect(() => {
@@ -48,15 +52,20 @@ export function useFillStream(apiKey: string | null, accountId: string | null): 
       }
     };
     const armStale = () => {
-      if (!staleTimer) staleTimer = setTimeout(() => setStatus('stale'), STALE_AFTER_MS);
+      if (!staleTimer) staleTimer = setTimeout(() => setStatus('stale'), WS_STALE_AFTER_MS);
     };
 
     socket.on('connect', () => {
       clearStale();
       setStatus('live');
+      setTransport(socket.io.engine?.transport?.name ?? null);
       if (sawDisconnect) {
         void queryClient.invalidateQueries({ queryKey: ['snapshot'] });
       }
+    });
+
+    socket.on('hello', (event: ServerHello) => {
+      setHello(event);
     });
 
     socket.on('disconnect', () => {
@@ -90,5 +99,5 @@ export function useFillStream(apiKey: string | null, accountId: string | null): 
     };
   }, [apiKey, queryClient]);
 
-  return { status: apiKey ? status : 'unauthorized', lastEvent, lastEventAt };
+  return { status: apiKey ? status : 'unauthorized', lastEvent, lastEventAt, hello, transport };
 }

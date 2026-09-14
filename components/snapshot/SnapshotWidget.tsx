@@ -7,6 +7,7 @@ import { ApiError } from '@/lib/api';
 import { useFormat, useT } from '@/lib/i18n';
 import type { MessageKey } from '@/lib/i18n/en';
 import { ConnectionBadge } from './ConnectionBadge';
+import { ConnectionPanel } from './ConnectionPanel';
 import { HighRiskBanner } from './HighRiskBanner';
 import { PnlCards } from './PnlCards';
 import { PositionsTable } from './PositionsTable';
@@ -93,6 +94,12 @@ export function SnapshotWidget({
         <div className="space-y-4">
           <RiskGauge risk={data.risk} />
           <SessionInfo data={data} lastEvent={stream.lastEvent} />
+          <ConnectionPanel
+            status={stream.status}
+            transport={stream.transport}
+            hello={stream.hello}
+            lastEventAt={stream.lastEventAt}
+          />
         </div>
       </div>
     </section>

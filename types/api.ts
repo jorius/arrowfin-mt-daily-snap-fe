@@ -53,6 +53,16 @@ export interface FillEvent {
   filledAt: string;
 }
 
+/** Sent by the server right after a socket is admitted. Configuration only, no ids, no PII. */
+export interface ServerHello {
+  serverTime: string;
+  pingIntervalMs: number;
+  pingTimeoutMs: number;
+  connectTimeoutMs: number;
+  transport: string;
+  rooms: number;
+}
+
 /** Response of POST /auth/api/key, kept for the tab in sessionStorage. */
 export interface Session {
   apiKey: string;
