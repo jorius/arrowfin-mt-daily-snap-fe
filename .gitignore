@@ -49,3 +49,6 @@ dataset/
 
 # keep the example env file tracked (the .env* rule above ignores it)
 !.env.example
+
+# Netlify CLI state
+.netlify/
