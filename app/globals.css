@@ -1,17 +1,98 @@
 @import "tailwindcss";
 
+/*
+ * Theming. Dark is the default trading look and is opt-in through the `dark`
+ * class on <html>, which app/layout.tsx sets before first paint from the stored
+ * preference (lib/theme.tsx). Every component uses the semantic tokens below,
+ * never a raw palette class, so both themes render from one set of classes.
+ *
+ * Palette source: arrowfin.io CSS variables (bg #0a0a12, section #11111a,
+ * card #1a1a24, text #e0e0e0, accents #00f2ff / #7b2cbf / #ff00a2).
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --bg: #f7f7fb;
+  --section: #ffffff;
+  --card: #ffffff;
+  --card-2: #f1f1f7;
+  --fg: #0a0a12;
+  --muted: #5a5a6e;
+  --faint: #8a8a9e;
+  --line: #e3e3ee;
+  --accent: #7b2cbf;
+  --accent-fg: #ffffff;
+  --accent-2: #0097a7;
+  --accent-soft: rgba(123, 44, 191, 0.1);
+  --pos: #047857;
+  --pos-soft: rgba(4, 120, 87, 0.1);
+  --warn: #b45309;
+  --warn-soft: rgba(180, 83, 9, 0.12);
+  --danger: #e11d48;
+  --danger-strong: #be123c;
+  --danger-soft: rgba(225, 29, 72, 0.1);
+  --danger-fg: #ffffff;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #0a0a12;
+  --section: #11111a;
+  --card: #1a1a24;
+  --card-2: #20202c;
+  --fg: #e0e0e0;
+  --muted: #a0a0a0;
+  --faint: #707070;
+  --line: #26263a;
+  --accent: #00f2ff;
+  --accent-fg: #0a0a12;
+  --accent-2: #7b2cbf;
+  --accent-soft: rgba(0, 242, 255, 0.1);
+  --pos: #34d399;
+  --pos-soft: rgba(52, 211, 153, 0.12);
+  --warn: #fbbf24;
+  --warn-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f43f5e;
+  --danger-strong: #e11d48;
+  --danger-soft: rgba(244, 63, 94, 0.14);
+  --danger-fg: #ffffff;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-bg: var(--bg);
+  --color-section: var(--section);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-2: var(--accent-2);
+  --color-accent-soft: var(--accent-soft);
+  --color-pos: var(--pos);
+  --color-pos-soft: var(--pos-soft);
+  --color-neg: var(--danger);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-strong: var(--danger-strong);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-fg: var(--danger-fg);
 }
 
-:root {
-  color-scheme: dark;
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
 }
 
 body {
-  background: #09090b;
-  color: #f4f4f5;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-feature-settings: "tnum";
 }

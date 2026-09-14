@@ -47,20 +47,20 @@ export function SnapshotWidget({
   const stale = stream.status === 'stale' || stream.status === 'unauthorized';
 
   return (
-    <section aria-label="Daily snapshot" className={high ? 'rounded-2xl ring-1 ring-rose-700/60' : ''}>
+    <section aria-label="Daily snapshot" className={high ? 'rounded-2xl ring-1 ring-danger/60' : ''}>
       {high ? <HighRiskBanner score={data.risk.score} /> : null}
 
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h1 className="font-mono text-sm font-semibold text-zinc-100">
+          <h1 className="font-mono text-sm font-semibold text-fg">
             {data.account.accountNumber}
-            <span className="ml-2 text-xs font-normal text-zinc-500">
+            <span className="ml-2 text-xs font-normal text-muted">
               {data.account.accountType} · {data.account.status}
             </span>
           </h1>
-          <div className="text-[11px] text-zinc-500">
+          <div className="text-[11px] text-muted">
             Snapshot as of {utcTime(data.asOf)}
-            {snapshot.isFetching ? <span className="ml-2 text-emerald-400">↻ updating</span> : null}
+            {snapshot.isFetching ? <span className="ml-2 text-accent-2">↻ updating</span> : null}
           </div>
         </div>
         <ConnectionBadge status={stream.status} lastEventAt={stream.lastEventAt} />

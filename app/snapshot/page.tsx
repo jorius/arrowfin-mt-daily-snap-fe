@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AccountSelector } from '@/components/snapshot/AccountSelector';
 import { SnapshotWidget } from '@/components/snapshot/SnapshotWidget';
 import { EmptyState, ErrorState, SnapshotSkeleton } from '@/components/snapshot/States';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAccounts } from '@/hooks/useAccounts';
 import { useHydrated } from '@/hooks/useHydrated';
 import { useSession } from '@/hooks/useSession';
@@ -38,7 +39,7 @@ export default function SnapshotPage() {
   }, [accountsUnauthorized, signOut]);
 
   if (!hydrated || !session) {
-    return <main className="flex flex-1 items-center justify-center text-sm text-zinc-500">Loading…</main>;
+    return <main className="flex flex-1 items-center justify-center text-sm text-muted">Loading…</main>;
   }
 
   const list = accounts.data?.accounts ?? [];
@@ -49,23 +50,24 @@ export default function SnapshotPage() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col">
-      <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
+      <header className="border-b border-line bg-bg/80 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <div className="flex items-center gap-3">
-            <span className="rounded bg-emerald-500 px-1.5 py-0.5 text-[10px] font-bold text-zinc-950">AF</span>
+            <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-accent-fg">AF</span>
             <div>
-              <div className="text-sm font-semibold text-zinc-100">{session.portalName}</div>
-              <div className="font-mono text-[11px] text-zinc-500">
+              <div className="text-sm font-semibold text-fg">{session.portalName}</div>
+              <div className="font-mono text-[11px] text-muted">
                 {session.principal.traderId} · {session.principal.brokerId}
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {list.length > 0 ? <AccountSelector accounts={list} value={current} onChange={setSelected} /> : null}
+            <ThemeToggle />
             <button
               type="button"
               onClick={() => void signOut()}
-              className="rounded-md border border-zinc-700 px-2.5 py-1.5 text-xs text-zinc-300 hover:bg-zinc-800"
+              className="rounded-md border border-line px-2.5 py-1.5 text-xs text-muted transition hover:bg-card-2 hover:text-fg"
             >
               Sign out
             </button>

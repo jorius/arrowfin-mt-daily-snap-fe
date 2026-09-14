@@ -10,12 +10,12 @@ export function AccountSelector({
   onChange: (id: string) => void;
 }) {
   return (
-    <label className="flex items-center gap-2 text-xs text-zinc-400">
+    <label className="flex items-center gap-2 text-xs text-muted">
       Account
       <select
         value={value ?? ''}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-md border border-zinc-700 bg-zinc-900 px-2 py-1.5 font-mono text-xs text-zinc-100 outline-none focus:border-emerald-500"
+        className="rounded-md border border-line bg-card px-2 py-1.5 font-mono text-xs text-fg outline-none focus:border-accent"
       >
         {accounts.map((a) => (
           <option key={a.id} value={a.id}>

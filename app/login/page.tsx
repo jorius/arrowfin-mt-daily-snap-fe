@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { ApiError, apiFetch } from '@/lib/api';
 import { setSession } from '@/lib/auth';
 import type { Session } from '@/types/api';
@@ -42,22 +43,21 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex flex-1 items-center justify-center p-6">
+    <main className="flex flex-1 items-center justify-center px-4 py-6 sm:p-6">
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-sm rounded-xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl shadow-black/40"
+        className="w-full max-w-sm rounded-xl border border-line bg-card p-6 shadow-xl shadow-black/10 dark:shadow-black/40"
       >
-        <div className="mb-6">
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
-            ArrowFin
+        <div className="mb-6 flex items-start justify-between gap-3">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">ArrowFin</div>
+            <h1 className="mt-1 text-lg font-semibold text-fg">Trader Portal</h1>
+            <p className="mt-1 text-xs text-muted">Sign in to view your daily snapshot.</p>
           </div>
-          <h1 className="mt-1 text-lg font-semibold text-zinc-100">Trader Portal</h1>
-          <p className="mt-1 text-xs text-zinc-500">
-            Sign in to view your daily snapshot.
-          </p>
+          <ThemeToggle />
         </div>
 
-        <label className="block text-xs font-medium text-zinc-400" htmlFor="traderId">
+        <label className="block text-xs font-medium text-muted" htmlFor="traderId">
           Trader id
         </label>
         <input
@@ -68,10 +68,10 @@ export default function LoginPage() {
           value={traderId}
           onChange={(e) => setTraderId(e.target.value)}
           placeholder="T-005"
-          className="mt-1 mb-4 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 font-mono text-sm text-zinc-100 outline-none placeholder:text-zinc-600 focus:border-emerald-500"
+          className="mt-1 mb-4 w-full rounded-md border border-line bg-bg px-3 py-2 font-mono text-sm text-fg outline-none placeholder:text-faint focus:border-accent"
         />
 
-        <label className="block text-xs font-medium text-zinc-400" htmlFor="secret">
+        <label className="block text-xs font-medium text-muted" htmlFor="secret">
           Secret
         </label>
         <input
@@ -82,11 +82,11 @@ export default function LoginPage() {
           required
           value={secret}
           onChange={(e) => setSecret(e.target.value)}
-          className="mt-1 mb-6 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-emerald-500"
+          className="mt-1 mb-6 w-full rounded-md border border-line bg-bg px-3 py-2 text-sm text-fg outline-none focus:border-accent"
         />
 
         {error ? (
-          <p role="alert" className="mb-4 rounded-md border border-rose-900 bg-rose-950/60 px-3 py-2 text-xs text-rose-300">
+          <p role="alert" className="mb-4 rounded-md border border-danger/40 bg-danger-soft px-3 py-2 text-xs text-danger">
             {error}
           </p>
         ) : null}
@@ -94,7 +94,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-md bg-accent px-3 py-2 text-sm font-semibold text-accent-fg transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? 'Signing in…' : 'Sign in'}
         </button>

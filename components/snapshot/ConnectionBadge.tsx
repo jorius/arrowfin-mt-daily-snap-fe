@@ -2,11 +2,11 @@ import type { StreamStatus } from '@/hooks/useFillStream';
 import { utcTime } from '@/lib/format';
 
 const STYLE: Record<StreamStatus, { text: string; dot: string; cls: string }> = {
-  connecting: { text: 'Connecting', dot: 'bg-zinc-400', cls: 'border-zinc-700 text-zinc-400' },
-  live: { text: 'Live', dot: 'bg-emerald-400 animate-pulse', cls: 'border-emerald-800 text-emerald-300' },
-  reconnecting: { text: 'Reconnecting', dot: 'bg-amber-400 animate-pulse', cls: 'border-amber-800 text-amber-300' },
-  stale: { text: 'Disconnected — figures may be stale', dot: 'bg-rose-500', cls: 'border-rose-800 text-rose-300' },
-  unauthorized: { text: 'Session expired', dot: 'bg-rose-500', cls: 'border-rose-800 text-rose-300' },
+  connecting: { text: 'Connecting', dot: 'bg-muted', cls: 'border-line text-muted' },
+  live: { text: 'Live', dot: 'bg-pos animate-pulse', cls: 'border-pos/40 bg-pos-soft text-pos' },
+  reconnecting: { text: 'Reconnecting', dot: 'bg-warn animate-pulse', cls: 'border-warn/40 bg-warn-soft text-warn' },
+  stale: { text: 'Disconnected — figures may be stale', dot: 'bg-danger', cls: 'border-danger/40 bg-danger-soft text-danger' },
+  unauthorized: { text: 'Session expired', dot: 'bg-danger', cls: 'border-danger/40 bg-danger-soft text-danger' },
 };
 
 export function ConnectionBadge({ status, lastEventAt }: { status: StreamStatus; lastEventAt: string | null }) {
@@ -14,7 +14,7 @@ export function ConnectionBadge({ status, lastEventAt }: { status: StreamStatus;
   return (
     <div className="flex items-center gap-3 text-xs">
       {lastEventAt && status === 'live' ? (
-        <span className="hidden text-zinc-500 sm:inline">last fill {utcTime(lastEventAt)}</span>
+        <span className="hidden text-muted sm:inline">last fill {utcTime(lastEventAt)}</span>
       ) : null}
       <span
         role="status"

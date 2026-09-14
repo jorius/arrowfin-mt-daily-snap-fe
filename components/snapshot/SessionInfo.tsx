@@ -11,22 +11,22 @@ export function SessionInfo({ data, lastEvent }: { data: SnapshotDto; lastEvent:
     ['Balance', money(data.account.balance)],
   ];
   return (
-    <section aria-label="Session" className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-      <h2 className="text-xs font-medium uppercase tracking-wider text-zinc-400">Session</h2>
+    <section aria-label="Session" className="rounded-xl border border-line bg-card p-4">
+      <h2 className="text-xs font-medium uppercase tracking-wider text-muted">Session</h2>
       <dl className="mt-2 space-y-1.5 text-xs">
         {rows.map(([k, v]) => (
           <div key={k} className="flex justify-between gap-3">
-            <dt className="text-zinc-500">{k}</dt>
-            <dd className="font-mono tabular-nums text-zinc-200">{v}</dd>
+            <dt className="text-muted">{k}</dt>
+            <dd className="font-mono tabular-nums text-fg">{v}</dd>
           </div>
         ))}
       </dl>
       {lastEvent ? (
-        <div className="mt-3 border-t border-zinc-800 pt-3 text-xs">
-          <div className="text-zinc-500">Last live fill</div>
-          <div className="mt-0.5 font-mono text-zinc-200">
+        <div className="mt-3 border-t border-line pt-3 text-xs">
+          <div className="text-muted">Last live fill</div>
+          <div className="mt-0.5 font-mono text-fg">
             {lastEvent.symbol} {lastEvent.side} {qty(lastEvent.quantity)} @ {price(lastEvent.price)}
-            <span className="text-zinc-500"> · {lastEvent.accountId} · {utcTime(lastEvent.filledAt)}</span>
+            <span className="text-muted"> · {lastEvent.accountId} · {utcTime(lastEvent.filledAt)}</span>
           </div>
         </div>
       ) : null}

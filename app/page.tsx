@@ -10,7 +10,7 @@ export default function Home() {
     router.replace(getSession() ? '/snapshot' : '/login');
   }, [router]);
   return (
-    <main className="flex flex-1 items-center justify-center text-sm text-zinc-500">
+    <main className="flex flex-1 items-center justify-center text-sm text-muted">
       Loading…
     </main>
   );
