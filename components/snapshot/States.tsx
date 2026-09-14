@@ -5,8 +5,8 @@ import { useT } from '@/lib/i18n';
 export function SnapshotSkeleton() {
   const t = useT();
   return (
-    <div aria-busy="true" aria-label={t('state.loading')} className="animate-pulse space-y-4">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+    <div aria-busy="true" aria-label={t('state.loading')} className="animate-pulse space-y-4 rounded-2xl border border-line bg-section p-4 md:p-6">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="h-20 rounded-xl border border-line bg-card" />
         ))}

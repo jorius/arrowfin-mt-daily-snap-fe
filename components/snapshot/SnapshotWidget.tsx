@@ -57,11 +57,16 @@ export function SnapshotWidget({
   const statusKey = STATUS_KEYS[data.account.status];
 
   return (
-    <section aria-label={t('snapshot.label')} className={high ? 'rounded-2xl ring-1 ring-danger/60' : ''}>
+    // One padded card. In the high-risk state the same card carries the ring, so
+    // the banner and every inner card keep their distance from the edge.
+    <section
+      aria-label={t('snapshot.label')}
+      className={`rounded-2xl border bg-section p-4 md:p-6 ${high ? 'border-danger ring-2 ring-danger' : 'border-line'}`}
+    >
       {high ? <HighRiskBanner score={data.risk.score} /> : null}
 
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <div>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
           <h1 className="font-mono text-sm font-semibold text-fg">
             {data.account.accountNumber}
             <span className="ml-2 text-xs font-normal text-muted">
