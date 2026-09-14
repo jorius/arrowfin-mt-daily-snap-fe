@@ -7,7 +7,7 @@ export function PositionsTable({ positions }: { positions: PositionDto[] }) {
   const t = useT();
   const { money, price, qty, signedMoney } = useFormat();
   return (
-    <div className="overflow-x-auto rounded-xl border border-line bg-card">
+    <div className="max-w-full overflow-x-auto rounded-xl border border-line bg-card">
       <table className="w-full min-w-[560px] text-left text-xs">
         <thead className="sticky top-0 bg-card-2 text-[11px] uppercase tracking-wider text-muted">
           <tr>

@@ -82,8 +82,10 @@ export function SnapshotWidget({
         <ConnectionBadge status={stream.status} lastEventAt={stream.lastEventAt} />
       </div>
 
-      <div className={`grid gap-4 lg:grid-cols-[2fr_1fr] ${stale ? 'opacity-60' : ''}`}>
-        <div className="space-y-4">
+      {/* min-w-0 on the columns: a grid item defaults to min-width:auto, and the table's
+          own minimum width would otherwise widen the column past the viewport on phones. */}
+      <div className={`grid min-w-0 gap-4 lg:grid-cols-[2fr_1fr] ${stale ? 'opacity-60' : ''}`}>
+        <div className="min-w-0 space-y-4">
           <PnlCards pnl={data.pnl} />
           {data.positions.length === 0 ? (
             <EmptyState title={t('positions.empty.title')} hint={t('positions.empty.hint')} />
@@ -91,7 +93,7 @@ export function SnapshotWidget({
             <PositionsTable positions={data.positions} />
           )}
         </div>
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <RiskGauge risk={data.risk} />
           <SessionInfo data={data} lastEvent={stream.lastEvent} />
           <ConnectionPanel
