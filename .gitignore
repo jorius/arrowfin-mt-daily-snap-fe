@@ -46,3 +46,6 @@ dataset/
 .local/
 
 # gitignore already covers .env*; belt and braces for the loader dir
+
+# keep the example env file tracked (the .env* rule above ignores it)
+!.env.example
